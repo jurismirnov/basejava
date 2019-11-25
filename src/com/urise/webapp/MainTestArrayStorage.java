@@ -1,5 +1,6 @@
-package com.urise.webapp.model;
+package com.urise.webapp;
 
+import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.ArrayStorage;
 
 /**
@@ -25,11 +26,21 @@ public class MainTestArrayStorage {
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
+        //Testing update
+        System.out.println("********* Start Testing update *********");
+        System.out.println("Get r3: " + r3.getUuid());
+        System.out.println("Updating r3");
+        r3.setUuid("uuid3_updated");
+        ARRAY_STORAGE.update(r3);
+        System.out.println("Get r3: " + r3.getUuid());
+        System.out.println("********* End Testing update *********");
+
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
         ARRAY_STORAGE.clear();
         printAll();
+
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
     }
