@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
     private int index = 0; //shows the position of first null
 
     /**
@@ -22,15 +22,15 @@ public class ArrayStorage {
     /**
      * put resume in the storage
      */
-    public void save(Resume r) {
-        if (index > 9998) {
+    public void save(Resume resume) {
+        if (index >= storage.length) {
             System.out.println("ERROR: the storage is full!");
         } else {
-            int ind = checkExistence(r.getUuid());
-            if (ind > -1) {
-                System.out.println("SAVE: ERROR: The resume with uuid " + r.getUuid() + " already exists!");
+            int idx = checkExistence(resume.getUuid());
+            if (idx > -1) {
+                System.out.println("SAVE: ERROR: The resume with uuid " + resume.getUuid() + " already exists!");
             } else {
-                storage[index] = r;
+                storage[index] = resume;
                 index++;
             }
         }
@@ -39,12 +39,12 @@ public class ArrayStorage {
     /**
      * update resume in the storage
      */
-    public void update(Resume r) {
-        int ind = checkExistence(r.getUuid());
-        if (ind > -1) {
-            storage[ind] = r;
+    public void update(Resume resume) {
+        int idx = checkExistence(resume.getUuid());
+        if (idx > -1) {
+            storage[idx] = resume;
         } else {
-            System.out.println("UPDATE: ERROR: The resume with uuid " + r.getUuid() + "does not exists!");
+            System.out.println("UPDATE: ERROR: The resume with uuid " + resume.getUuid() + "does not exists!");
         }
     }
 
@@ -52,9 +52,9 @@ public class ArrayStorage {
      * returns the resume by uuid
      */
     public Resume get(String uuid) {
-        int ind = checkExistence(uuid);
-        if (ind > -1) {
-            return storage[ind];
+        int idx = checkExistence(uuid);
+        if (idx > -1) {
+            return storage[idx];
         } else {
             System.out.println("GET: ERROR: Can't find the resume in storage!");
             return null;
@@ -65,9 +65,9 @@ public class ArrayStorage {
      * deletes the resume by uuid
      */
     public void delete(String uuid) {
-        int ind = checkExistence(uuid);
-        if (ind > -1) {
-            storage[ind] = storage[index - 1];
+        int idx = checkExistence(uuid);
+        if (idx > -1) {
+            storage[idx] = storage[index - 1];
             storage[index - 1] = null;
             index--;
         } else {
