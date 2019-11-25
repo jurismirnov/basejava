@@ -23,12 +23,12 @@ public class ArrayStorage {
      * put resume in the storage
      */
     public void save(Resume r) {
-        int ind = checkExistence(r.getUuid());
-        if (ind > -1) {
-            System.out.println("SAVE: ERROR: The resume with uuid " + r.getUuid() + " already exists!");
+        if (index > 9998) {
+            System.out.println("ERROR: the storage is full!");
         } else {
-            if (index > 9998) {
-                System.out.println("ERROR: the storage is full!");
+            int ind = checkExistence(r.getUuid());
+            if (ind > -1) {
+                System.out.println("SAVE: ERROR: The resume with uuid " + r.getUuid() + " already exists!");
             } else {
                 storage[index] = r;
                 index++;
