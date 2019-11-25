@@ -25,10 +25,14 @@ public class ArrayStorage {
     public void save(Resume r) {
         int ind = checkExistence(r.getUuid());
         if (ind > -1) {
-            System.out.println("SAVE: ERROR: The resume with uuid " + r.getUuid() + " already exists!" );
+            System.out.println("SAVE: ERROR: The resume with uuid " + r.getUuid() + " already exists!");
         } else {
-            storage[index] = r;
-            index++;
+            if (index > 9998) {
+                System.out.println("ERROR: the storage is full!");
+            } else {
+                storage[index] = r;
+                index++;
+            }
         }
     }
 
@@ -73,6 +77,7 @@ public class ArrayStorage {
 
     /**
      * Checks the existence of resume in storage by uuid(String)
+     *
      * @return the index of resume, -1 if not found
      */
     private int checkExistence(String uuid) {
