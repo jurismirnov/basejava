@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 public abstract class AbstractArrayStorage {
     final private int STORAGE_LENGTH = 10_000;
-    final private Resume[] storage = new Resume[STORAGE_LENGTH];
-    private int size = 0; //shows the position of first null
+    final protected Resume[] storage = new Resume[STORAGE_LENGTH];
+    protected int size = 0; //shows the position of first null
 
     /**
      * clear all values in storage (change to null)
