@@ -44,8 +44,8 @@ public abstract class AbstractArrayStorage {
     public void update(Resume resume) {
         int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
         if (idx > -1) {
-            remove(idx);        //this step may differ for different storages
-            putInStorage(size, resume, idx); //this step may differ for different storages
+            delete(resume.getUuid());
+            save(resume);
         } else {
             System.out.println("UPDATE: ERROR: The resume with uuid " + resume.getUuid() + "does not exists!");
         }
@@ -82,7 +82,6 @@ public abstract class AbstractArrayStorage {
 
     /**
      * Checks the existence of resume in storage by uuid(String)
-     *
      * @return the index of resume, -1 if not found
      */
     abstract int checkExistence(String uuid);
