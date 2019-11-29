@@ -18,18 +18,18 @@ public abstract class AbstractArrayStorage {
     }
 
     /**
-     * put resume in the storage
+     * put resume in the storage (Pattern)
      */
     public void save(Resume resume) {
         if (size >= storage.length) {
             System.out.println("ERROR: the storage is full!");
         } else {
-            int idx = checkExistence(resume.getUuid());
+            int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
             if (idx > -1) {
                 System.out.println("SAVE: ERROR: The resume with uuid " + resume.getUuid() + " already exists!");
             } else {
                 //************************************
-                putInStorage(size, resume, idx);
+                putInStorage(size, resume, idx); //this step may differ for different storages
                 //************************************
                 size++;
             }
@@ -39,23 +39,23 @@ public abstract class AbstractArrayStorage {
     abstract void putInStorage(int index, Resume resume, int idx);
 
     /**
-     * update resume in the storage
+     * update resume in the storage (Pattern)
      */
     public void update(Resume resume) {
-        int idx = checkExistence(resume.getUuid());
+        int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
         if (idx > -1) {
-            delete(resume.getUuid());
-            save(resume);
+            remove(idx);        //this step may differ for different storages
+            putInStorage(size, resume, idx); //this step may differ for different storages
         } else {
             System.out.println("UPDATE: ERROR: The resume with uuid " + resume.getUuid() + "does not exists!");
         }
     }
 
     /**
-     * returns the resume by uuid
+     * returns the resume by uuid (Pattern)
      */
     public Resume get(String uuid) {
-        int idx = checkExistence(uuid);
+        int idx = checkExistence(uuid); //this step may differ for different storages
         if (idx > -1) {
             return storage[idx];
         } else {
@@ -65,12 +65,12 @@ public abstract class AbstractArrayStorage {
     }
 
     /**
-     * deletes the resume by uuid
+     * deletes the resume by uuid (Pattern)
      */
     public void delete(String uuid) {
-        int idx = checkExistence(uuid);
+        int idx = checkExistence(uuid); //this step may differ for different storages
         if (idx > -1) {
-            remove(idx);
+            remove(idx);        //this step may differ for different storages
             storage[size - 1] = null;
             size--;
         } else {
