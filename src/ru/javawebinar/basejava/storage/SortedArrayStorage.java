@@ -20,17 +20,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      * (the array is sorted after insert)
      */
     @Override
-    void putInStorage(int index, Resume resume, int idx) {
-        if (getInsertIndex() < 0) {
+    void putInStorage(Resume resume, int idx) {
+        if (insertIndex < 0) {
             System.out.println("PutInStorage:Error the resume already exists!");
         } else {
-            Resume[] resumeEnd = Arrays.copyOfRange(storage, getInsertIndex(), index);
-            storage[getInsertIndex()] = resume;
-            int k = 1;
-            for (Resume res : resumeEnd) {
-                storage[getInsertIndex() + k] = res;
-                k++;
-            }
+            System.arraycopy(storage, insertIndex, storage, insertIndex + 1, size - insertIndex);
+            storage[insertIndex] = resume;
+
             setInsertIndex(-1); //set the insert index default value
         }
     }
@@ -38,25 +34,25 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     /**
      * remove resume from array
      * array is sorted, no gaps
+     *
      * @param idx - position of resume in storage
      */
     @Override
     void remove(int idx) {
-        for (int i = idx + 1; i < size; i++) {
-            storage[i - 1] = storage[i]; //shift all records after idx to the left
-        }
+        //shift all records after idx to the left
+        if (size - idx + 1 >= 0) System.arraycopy(storage, idx + 1, storage, idx + 1 - 1, size - idx + 1);
     }
 
     /**
      * Checks the existence of resume in storage by uuid(String) using binarySearch
+     *
      * @return the index of resume, -1 if not found
      */
     @Override
     protected int checkExistence(String uuid) {
         Resume resTemp = new Resume();
         resTemp.setUuid(uuid);
-        Resume[] tempStorage = getAll();
-        int idx = Arrays.binarySearch(tempStorage, resTemp);
+        int idx = Arrays.binarySearch(getAll(), resTemp);
         if (idx >= 0) {
             return idx;
         } else {

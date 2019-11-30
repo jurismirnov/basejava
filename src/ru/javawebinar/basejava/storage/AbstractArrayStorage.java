@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 public abstract class AbstractArrayStorage {
     final private int STORAGE_LENGTH = 10_000;
-    final protected Resume[] storage = new Resume[STORAGE_LENGTH];
-    protected int size = 0; //shows the position of first null
+    final Resume[] storage = new Resume[STORAGE_LENGTH];
+    int size = 0; //shows the position of first null
 
     /**
      * clear all values in storage (change to null)
@@ -29,14 +29,14 @@ public abstract class AbstractArrayStorage {
                 System.out.println("SAVE: ERROR: The resume with uuid " + resume.getUuid() + " already exists!");
             } else {
                 //************************************
-                putInStorage(size, resume, idx); //this step may differ for different storages
+                putInStorage(resume, idx); //this step may differ for different storages
                 //************************************
                 size++;
             }
         }
     }
 
-    abstract void putInStorage(int index, Resume resume, int idx);
+    abstract void putInStorage(Resume resume, int idx);
 
     /**
      * update resume in the storage (Pattern)
@@ -44,8 +44,7 @@ public abstract class AbstractArrayStorage {
     public void update(Resume resume) {
         int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
         if (idx > -1) {
-            delete(resume.getUuid());
-            save(resume);
+            storage[idx] = resume;
         } else {
             System.out.println("UPDATE: ERROR: The resume with uuid " + resume.getUuid() + "does not exists!");
         }
@@ -58,10 +57,10 @@ public abstract class AbstractArrayStorage {
         int idx = checkExistence(uuid); //this step may differ for different storages
         if (idx > -1) {
             return storage[idx];
-        } else {
-            System.out.println("GET: ERROR: Can't find the resume in storage!");
-            return null;
         }
+        System.out.println("GET: ERROR: Can't find the resume in storage!");
+        return null;
+
     }
 
     /**
@@ -82,6 +81,7 @@ public abstract class AbstractArrayStorage {
 
     /**
      * Checks the existence of resume in storage by uuid(String)
+     *
      * @return the index of resume, -1 if not found
      */
     abstract int checkExistence(String uuid);

@@ -9,11 +9,12 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     /**
      * Checks the existence of resume in storage by uuid(String)
+     *
      * @return the index of resume, -1 if not found
      */
     @Override
     protected int checkExistence(String uuid) {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size(); i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
@@ -22,8 +23,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    void putInStorage(int index, Resume resume, int idx) {
-        storage[index] = resume;
+    void putInStorage(Resume resume, int idx) {
+        storage[size] = resume;
     }
 
     @Override
