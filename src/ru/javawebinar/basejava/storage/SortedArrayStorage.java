@@ -5,29 +5,21 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-    private int insertIndex = -1;
-
-    private int getInsertIndex() {
-        return insertIndex;
-    }
-
-    private void setInsertIndex(int insertIndex) {
-        this.insertIndex = insertIndex;
-    }
 
     /**
-     * put resume in the storage (Pattern)
+     * put resume in the storage
      * (the array is sorted after insert)
+     *
+     * @param resume to put in storage; idx positive if already present in storage, negative if don't(shows insert position)
      */
     @Override
     void putInStorage(Resume resume, int idx) {
-        if (insertIndex < 0) {
+        if (idx >= 0) {
             System.out.println("PutInStorage:Error the resume already exists!");
         } else {
+            int insertIndex = -(idx + 1);
             System.arraycopy(storage, insertIndex, storage, insertIndex + 1, size - insertIndex);
             storage[insertIndex] = resume;
-
-            setInsertIndex(-1); //set the insert index default value
         }
     }
 
@@ -50,16 +42,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      */
     @Override
     protected int checkExistence(String uuid) {
-        Resume resTemp = new Resume();
-        resTemp.setUuid(uuid);
-        int idx = Arrays.binarySearch(getAll(), resTemp);
-        if (idx >= 0) {
-            return idx;
-        } else {
+        Resume resume = new Resume();
+        resume.setUuid(uuid);
+        int idx = Arrays.binarySearch(storage, 0, size, resume);
+        if (idx < 0) {
             System.out.println("Check existence: the resume with uuid " + uuid + " not found.");
-            setInsertIndex(-(idx + 1)); //save the insert position
-            return -1;
         }
+        return idx;
     }
 
 }
