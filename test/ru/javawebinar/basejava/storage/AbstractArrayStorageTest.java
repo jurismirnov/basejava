@@ -10,7 +10,11 @@ import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractArrayStorageTest {
 
-    private Storage storage;
+    private final Storage storage;
+    private final Resume r1 = new Resume("uuid1");
+    private final Resume r2 = new Resume("uuid11");
+    private final Resume r3 = new Resume("uuid2");
+    private final Resume r4 = new Resume("uuid3");
 
     AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -18,11 +22,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Before
     public void setUp() {
-        Resume r1 = new Resume("uuid1");
-        Resume r2 = new Resume("uuid3");
-        Resume r3 = new Resume("uuid2");
-        Resume r4 = new Resume("uuid11");
-
+        storage.clear();
         storage.save(r1);
         storage.save(r2);
         storage.save(r3);
@@ -31,15 +31,36 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void clear() {
+        Assert.assertEquals(4, storage.size());
         storage.clear();
         Assert.assertEquals(0, storage.size());
     }
 
     @Test
     public void save() {
-        storage.save(new Resume());
+        storage.save(new Resume("uuid_save"));
         Assert.assertEquals(5, storage.size());
+        Assert.assertEquals("uuid_save", storage.get("uuid_save").toString());
     }
+
+    @Test(expected = ExistStorageException.class)
+    public void saveExist() {
+        storage.save(new Resume("uuid2"));
+    }
+
+    @Test(expected = StorageException.class)
+    public void saveOverflow() {
+        try {
+            storage.clear();
+            for (int i = 0; i < storage.length(); i++) {
+                storage.save(new Resume());
+            }
+        } catch (StorageException e) {
+            Assert.fail("Storage overflow during the filling");
+        }
+        storage.save(new Resume());
+    }
+
 
     @Test
     public void update() {
@@ -49,27 +70,30 @@ public abstract class AbstractArrayStorageTest {
         Assert.assertEquals(size, storage.size());
     }
 
-    @Test
-    public void get() {
-        Resume resume = storage.get("uuid2");
-        Assert.assertEquals(resume.getUuid(), "uuid2");
+    @Test(expected = NotExistStorageException.class)
+    public void updateNotExist() {
+        storage.update(new Resume("dummy"));
     }
 
-    @Test
+
+    @Test(expected = NotExistStorageException.class)
     public void delete() {
         int size = storage.size();
         storage.delete("uuid2");
         Assert.assertEquals(size - 1, storage.size());
+        storage.get("uuid2");
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExist() {
+        storage.delete("dummy");
     }
 
     @Test
-    public void getAll() {
-        Assert.assertEquals(storage.getAll().length, storage.size());
-    }
-
-    @Test
-    public void size() {
-        Assert.assertEquals(4, storage.size());
+    public void get() {
+        Resume resume = storage.get("uuid2");
+        Assert.assertEquals("uuid2", resume.getUuid());
+        Assert.assertEquals(r3, resume);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -77,21 +101,15 @@ public abstract class AbstractArrayStorageTest {
         storage.get("dummy");
     }
 
-    @Test(expected = ExistStorageException.class)
-    public void getExist() {
-        storage.save(new Resume("uuid1"));
+    @Test
+    public void getAll() {
+        Assert.assertEquals(storage.getAll().length, storage.size());
+        Resume[] resumeArray = new Resume[]{r1, r2, r3, r4};
+        Assert.assertArrayEquals(resumeArray, storage.getAll());
     }
 
-    @Test(expected = StorageException.class)
-    public void getOverflow() {
-        try {
-            storage.clear();
-            for (int i = 0; i < 10_000; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail();
-        }
-        storage.save(new Resume());
+    @Test
+    public void size() {
+        Assert.assertEquals(4, storage.size());
     }
 }

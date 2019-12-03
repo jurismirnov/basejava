@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage {
+public class SortedArrayStorage extends AbstractArrayStorage implements Storage {
 
     /**
      * put resume in the storage
@@ -14,13 +14,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      */
     @Override
     void putInStorage(Resume resume, int idx) {
-        if (idx >= 0) {
-            System.out.println("PutInStorage:Error the resume already exists!");
-        } else {
-            int insertIndex = -(idx + 1);
-            System.arraycopy(storage, insertIndex, storage, insertIndex + 1, size - insertIndex);
-            storage[insertIndex] = resume;
-        }
+        int insertIndex = -(idx + 1);
+        System.arraycopy(storage, insertIndex, storage, insertIndex + 1, size - insertIndex);
+        storage[insertIndex] = resume;
+
     }
 
     /**
@@ -42,13 +39,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
      */
     @Override
     protected int checkExistence(String uuid) {
-        Resume resume = new Resume();
-        resume.setUuid(uuid);
-        int idx = Arrays.binarySearch(storage, 0, size, resume);
-        if (idx < 0) {
-            System.out.println("Check existence: the resume with uuid " + uuid + " not found.");
-        }
-        return idx;
+        Resume resume = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, resume);
     }
 
 }

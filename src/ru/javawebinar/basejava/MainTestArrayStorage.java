@@ -4,18 +4,15 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.ArrayStorage;
 
 /**
- * Test for your com.urise.webapp.storage.ArrayStorage implementation
+ * Test for your ru.javawebinar.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
     private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid3");
+        Resume r1 = new Resume("uuid1");
+        Resume r2 = new Resume("uuid2");
+        Resume r3 = new Resume("uuid3");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
@@ -30,7 +27,6 @@ public class MainTestArrayStorage {
         System.out.println("********* Start Testing update *********");
         System.out.println("Get r3: " + r3.getUuid());
         System.out.println("Updating r3");
-        r3.setUuid("uuid3_updated");
         ARRAY_STORAGE.update(r3);
         System.out.println("Get r3: " + r3.getUuid());
         System.out.println("********* End Testing update *********");

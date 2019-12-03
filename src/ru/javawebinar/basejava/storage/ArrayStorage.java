@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage extends AbstractArrayStorage {
+public class ArrayStorage extends AbstractArrayStorage implements Storage {
 
     /**
      * Checks the existence of resume in storage by uuid(String)

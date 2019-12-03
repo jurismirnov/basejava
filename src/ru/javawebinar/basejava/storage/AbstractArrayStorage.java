@@ -1,10 +1,13 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage {
+public abstract class AbstractArrayStorage implements Storage {
     final private int STORAGE_LENGTH = 10_000;
     final Resume[] storage = new Resume[STORAGE_LENGTH];
     int size = 0; //shows the position of first null
@@ -22,11 +25,11 @@ public abstract class AbstractArrayStorage {
      */
     public void save(Resume resume) {
         if (size >= storage.length) {
-            System.out.println("ERROR: the storage is full!");
+            throw new StorageException("Storage overflow!", resume.getUuid());
         } else {
             int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
             if (idx > -1) {
-                System.out.println("SAVE: ERROR: The resume with uuid " + resume.getUuid() + " already exists!");
+                throw new ExistStorageException(resume.getUuid());
             } else {
                 //************************************
                 putInStorage(resume, idx); //this step may differ for different storages
@@ -46,7 +49,7 @@ public abstract class AbstractArrayStorage {
         if (idx > -1) {
             storage[idx] = resume;
         } else {
-            System.out.println("UPDATE: ERROR: The resume with uuid " + resume.getUuid() + "does not exists!");
+            throw new NotExistStorageException(resume.getUuid());
         }
     }
 
@@ -58,9 +61,7 @@ public abstract class AbstractArrayStorage {
         if (idx > -1) {
             return storage[idx];
         }
-        System.out.println("GET: ERROR: Can't find the resume in storage!");
-        return null;
-
+        throw new NotExistStorageException(uuid);
     }
 
     /**
@@ -73,7 +74,7 @@ public abstract class AbstractArrayStorage {
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("DELETE: ERROR: Can't find the resume in storage!");
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -99,4 +100,12 @@ public abstract class AbstractArrayStorage {
     public int size() {
         return size;
     }
+
+    /**
+     * @return length of storage
+     */
+    public int length() {
+        return storage.length;
+    }
+
 }
