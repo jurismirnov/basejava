@@ -77,7 +77,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume("dummy"));
+        storage.update(new Resume(DUMMY));
     }
 
 
