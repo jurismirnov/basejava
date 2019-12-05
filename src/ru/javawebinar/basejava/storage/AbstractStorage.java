@@ -4,59 +4,54 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-public abstract class AbstractStorage implements Storage {
+abstract class AbstractStorage implements Storage {
 
-    /**
-     * the variable "exists" must in absract method "checkexistence" gesetzen werden
-     */
-    protected boolean exists;   //exists resume in storage or not
+     abstract boolean exists(Object getSearchKeyOutput);
 
-    abstract void saving(Resume resume, Object result);
+    abstract void doSave(Resume resume, Object keyToSave);
 
-    abstract void updating(Resume resume, Object result);
+    abstract void doUpdate(Resume resume, Object keyToUpdate);
 
-    abstract Resume getting(Resume resume, Object object);
+    abstract Resume doGet(Object keyToGet);
 
-    abstract void deleting(Resume resume, Object result);
+    abstract void doDelete(Object keyToDelete);
 
-    abstract Object checkExistence(Resume resume);
+    abstract Object getSearchKey(Resume resume);
 
     public void save(Resume resume) {
         Object result = doesNotExist(resume);
-        saving(resume, result);
+        doSave(resume, result);
     }
 
     public void update(Resume resume) {
         Object result = doesExist(resume);
-        updating(resume, result);
+        doUpdate(resume, result);
     }
 
     public void delete(String uuid) {
-        Resume resume = new Resume(uuid);
-        Object result = doesExist(resume);
-        deleting(resume, result);
+        Object result = doesExist(new Resume(uuid));
+        doDelete(result);
     }
 
     public Resume get(String uuid) {
-        Resume resume = new Resume(uuid);
-        Object result = doesExist(resume);
-        return getting(resume, result);
+        Object result = doesExist(new Resume(uuid));
+        return doGet(result);
     }
 
     private Object doesExist(Resume resume) {
-        Object object = checkExistence(resume);
-        if (!exists) {
+        Object searchKey = getSearchKey(resume);
+        if (!exists(searchKey)) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        return object;
+        return searchKey;
     }
 
     private Object doesNotExist(Resume resume) {
-        Object object = checkExistence(resume);
-        if (exists) {
+        Object searchKey = getSearchKey(resume);
+        if (exists(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
         }
-        return object;
+        return searchKey;
     }
 
 }

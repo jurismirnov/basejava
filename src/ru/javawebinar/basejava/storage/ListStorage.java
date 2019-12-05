@@ -4,42 +4,44 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 
-public class ListStorage extends AbstractStorage {
-    public ArrayList<Resume> storage;
+class ListStorage extends AbstractStorage {
+    private ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
-    void saving(Resume resume, Object result) {
+    void doSave(Resume resume, Object keyToSave) {
         storage.add(resume);
     }
 
     @Override
-    void updating(Resume resume, Object result) {
-        storage.remove(resume);
-        saving(resume, result);
+    void doUpdate(Resume resume, Object keyToUpdate) {
+        storage.set((int) keyToUpdate, resume);
     }
 
     @Override
-    Resume getting(Resume resume, Object object) {
-        int idx = (int) checkExistence(resume);
-        if (exists) {
-            return storage.get(idx);
+    Resume doGet(Object keyToGet) {
+        return storage.get((int) keyToGet);
+    }
+
+    @Override
+    void doDelete(Object keyToDelete) {
+        storage.remove((int) keyToDelete);
+    }
+
+    @Override
+    Object getSearchKey(Resume resume) {
+        int i=0;
+        for (Resume res:storage){
+            if (res.equals(resume)) {
+                return i;
+            }
+            i+=1;
         }
         return null;
     }
 
     @Override
-    void deleting(Resume resume, Object result) {
-        storage.remove(resume);
-    }
-
-    @Override
-    Object checkExistence(Resume resume) {
-        if (storage.contains(resume)) {
-            exists = true;
-            return storage.indexOf(resume);
-        }
-        exists = false;
-        return null;
+    boolean exists(Object getSearchKeyOutput) {
+        return (getSearchKeyOutput != null);
     }
 
     @Override
@@ -49,9 +51,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] allResume = new Resume[size()];
-        allResume = storage.toArray(allResume);
-        return allResume;
+        return storage.toArray(new Resume[size()]);
     }
 
     @Override
@@ -63,6 +63,5 @@ public class ListStorage extends AbstractStorage {
     public int length() {
         return storage.size();
     }
-
 
 }
