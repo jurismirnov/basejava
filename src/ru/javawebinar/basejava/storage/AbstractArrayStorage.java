@@ -1,13 +1,11 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     final private int STORAGE_LENGTH = 10_000;
     final Resume[] storage = new Resume[STORAGE_LENGTH];
     int size = 0; //shows the position of first null
@@ -23,19 +21,13 @@ public abstract class AbstractArrayStorage implements Storage {
     /**
      * put resume in the storage (Pattern)
      */
-    public void save(Resume resume) {
+    @Override
+    public void saving(Resume resume, Object object) {
         if (size >= storage.length) {
             throw new StorageException("Storage overflow!", resume.getUuid());
         } else {
-            int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
-            if (idx > -1) {
-                throw new ExistStorageException(resume.getUuid());
-            } else {
-                //************************************
-                putInStorage(resume, idx); //this step may differ for different storages
-                //************************************
-                size++;
-            }
+            putInStorage(resume, (int) object);
+            size += 1;
         }
     }
 
@@ -44,48 +36,30 @@ public abstract class AbstractArrayStorage implements Storage {
     /**
      * update resume in the storage (Pattern)
      */
-    public void update(Resume resume) {
-        int idx = checkExistence(resume.getUuid()); //this step may differ for different storages
-        if (idx > -1) {
-            storage[idx] = resume;
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-    }
-
-    /**
-     * returns the resume by uuid (Pattern)
-     */
-    public Resume get(String uuid) {
-        int idx = checkExistence(uuid); //this step may differ for different storages
-        if (idx > -1) {
-            return storage[idx];
-        }
-        throw new NotExistStorageException(uuid);
+    @Override
+    public void updating(Resume resume, Object object) {
+        storage[(int) object] = resume;
     }
 
     /**
      * deletes the resume by uuid (Pattern)
      */
-    public void delete(String uuid) {
-        int idx = checkExistence(uuid); //this step may differ for different storages
-        if (idx > -1) {
-            remove(idx);        //this step may differ for different storages
-            storage[size - 1] = null;
-            size--;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    public void deleting(Resume resume, Object object) {
+        remove((int) object);        //this step may differ for different storages
+        storage[size - 1] = null;
+        size -= 1;
     }
 
     abstract void remove(int idx);
 
     /**
-     * Checks the existence of resume in storage by uuid(String)
-     *
-     * @return the index of resume, -1 if not found
+     * returns the resume by uuid (Pattern)
      */
-    abstract int checkExistence(String uuid);
+    @Override
+    public Resume getting(Resume resume, Object object) {
+        return storage[(int) object];
+    }
 
     /**
      * @return array, contains only Resumes in storage (without null)

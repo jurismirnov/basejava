@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage implements Storage {
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     /**
      * put resume in the storage
@@ -38,9 +38,10 @@ public class SortedArrayStorage extends AbstractArrayStorage implements Storage 
      * @return the index of resume, -1 if not found
      */
     @Override
-    protected int checkExistence(String uuid) {
-        Resume resume = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, resume);
+    protected Object checkExistence(Resume resume) {
+        int result = Arrays.binarySearch(storage, 0, size, resume);
+        exists = (result >= 0);
+        return result;
     }
 
 }
