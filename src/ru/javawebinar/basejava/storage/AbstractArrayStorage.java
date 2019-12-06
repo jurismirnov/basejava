@@ -5,10 +5,14 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-abstract class AbstractArrayStorage extends AbstractStorage {
-    final private int STORAGE_LENGTH = 10_000;
+public abstract class AbstractArrayStorage extends AbstractStorage {
+    protected static final int STORAGE_LENGTH = 10_000;
     final Resume[] storage = new Resume[STORAGE_LENGTH];
     int size = 0; //shows the position of first null
+
+    abstract void putInStorage(Resume resume, int idx);
+
+    abstract void remove(int idx);
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
@@ -21,34 +25,30 @@ abstract class AbstractArrayStorage extends AbstractStorage {
             throw new StorageException("Storage overflow!", resume.getUuid());
         } else {
             putInStorage(resume, (int) keyToSave);
-            size += 1;
+            size++;
         }
     }
 
-    abstract void putInStorage(Resume resume, int idx);
-
     @Override
-    public void doUpdate(Resume resume, Object keyToUpdate) {
-        storage[(int) keyToUpdate] = resume;
+    public void doUpdate(Resume resume, Object key) {
+        storage[(Integer) key] = resume;
     }
 
     @Override
-    public void doDelete(Object keyToDelete) {
-        remove((int) keyToDelete);        //this step may differ for different storages
+    public void doDelete(Object key) {
+        remove((Integer) key);        //this step may differ for different storages
         storage[size - 1] = null;
-        size -= 1;
+        size--;
     }
 
-    abstract void remove(int idx);
-
     @Override
-    public Resume doGet(Object keyToGet) {
-        return storage[(int) keyToGet];
+    public Resume doGet(Object key) {
+        return storage[(Integer) key];
     }
 
     @Override
     boolean exists(Object getSearchKeyOutput) {
-        return ((int) getSearchKeyOutput >= 0);
+        return ((Integer) getSearchKeyOutput >= 0);
     }
 
     public Resume[] getAll() {
@@ -58,10 +58,4 @@ abstract class AbstractArrayStorage extends AbstractStorage {
     public int size() {
         return size;
     }
-
-    @Override
-    public int length() {
-        return STORAGE_LENGTH;
-    }
-
 }

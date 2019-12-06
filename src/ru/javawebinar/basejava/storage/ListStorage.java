@@ -13,35 +13,36 @@ class ListStorage extends AbstractStorage {
     }
 
     @Override
-    void doUpdate(Resume resume, Object keyToUpdate) {
-        storage.set((int) keyToUpdate, resume);
+    void doUpdate(Resume resume, Object key) {
+        storage.set((Integer) key, resume);
     }
 
     @Override
-    Resume doGet(Object keyToGet) {
-        return storage.get((int) keyToGet);
+    Resume doGet(Object key) {
+        return storage.get((Integer) key);
     }
 
     @Override
-    void doDelete(Object keyToDelete) {
-        storage.remove((int) keyToDelete);
+    void doDelete(Object key) {
+        storage.remove((Integer) key);
     }
 
     @Override
-    Object getSearchKey(Resume resume) {
-        int i=0;
-        for (Resume res:storage){
+    Integer getSearchKey(String uuid) {
+        int i = 0;
+        Resume resume = new Resume(uuid);
+        for (Resume res : storage) {
             if (res.equals(resume)) {
                 return i;
             }
-            i+=1;
+            i++;
         }
         return null;
     }
 
     @Override
     boolean exists(Object getSearchKeyOutput) {
-        return (getSearchKeyOutput != null);
+        return getSearchKeyOutput != null;
     }
 
     @Override
@@ -58,10 +59,4 @@ class ListStorage extends AbstractStorage {
     public int size() {
         return storage.size();
     }
-
-    @Override
-    public int length() {
-        return storage.size();
-    }
-
 }
