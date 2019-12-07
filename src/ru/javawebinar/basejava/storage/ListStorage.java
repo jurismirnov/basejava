@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 
-class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage {
     private ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
@@ -24,15 +24,14 @@ class ListStorage extends AbstractStorage {
 
     @Override
     void doDelete(Object key) {
-        storage.remove((Integer) key);
+        storage.remove(((Integer) key).intValue());
     }
 
     @Override
     Integer getSearchKey(String uuid) {
         int i = 0;
-        Resume resume = new Resume(uuid);
         for (Resume res : storage) {
-            if (res.equals(resume)) {
+            if (res.getUuid().equals(uuid)) {
                 return i;
             }
             i++;
