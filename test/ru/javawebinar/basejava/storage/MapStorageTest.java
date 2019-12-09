@@ -6,30 +6,28 @@ import org.junit.Test;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
-public class MapStorageTest extends AbstractArrayStorageTest{
+public class MapStorageTest extends AbstractArrayStorageTest {
 
     public MapStorageTest() {
         super(new MapStorage());
     }
 
-    @Override @Ignore @Test
+    @Override
+    @Ignore
+    @Test
     public void saveOverflow() {
     }
 
-    @Override @Test
-    public void getAll(){
-        Resume[] allResume = storage.getAll();
-        Assert.assertEquals(allResume.length, storage.size());
-        ArrayList<Resume> resumeList = new ArrayList<>();
-        resumeList.add(R1);
-        resumeList.add(R2);
-        resumeList.add(R3);
-        resumeList.add(R4);
-        for (Resume res : allResume) {
-            if (!resumeList.contains(res)) {
-                Assert.fail("The resume " + res + " not found!");
-            }
-        }
+    @Override
+    @Test
+    public void getAll() {
+        ArrayList<Resume> expected = new ArrayList<>(Arrays.asList(R1, R2, R3, R4));
+        ArrayList<Resume> allResume = new ArrayList<>(Arrays.asList(storage.getAll()));
+        Collections.sort(allResume);
+        Assert.assertEquals(expected.size(), allResume.size());
+        Assert.assertEquals(expected, allResume);
     }
 }

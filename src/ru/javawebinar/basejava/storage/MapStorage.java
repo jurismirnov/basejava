@@ -9,8 +9,8 @@ public class MapStorage extends AbstractStorage {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    boolean isExist(Object searchKey) {
-        return storage.containsKey(String.valueOf(searchKey));
+    boolean isExist(Object uuid) {
+        return storage.containsKey((String) uuid);
     }
 
     @Override
@@ -20,21 +20,21 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     void doUpdate(Resume resume, Object key) {
-        storage.replace(String.valueOf(key), resume);
+        storage.replace((String) key, resume);
     }
 
     @Override
     Resume doGet(Object key) {
-        return storage.get(String.valueOf(key));
+        return storage.get((String) key);
     }
 
     @Override
     void doDelete(Object key) {
-        storage.remove(String.valueOf(key));
+        storage.remove((String) key);
     }
 
     @Override
-    Object getSearchKey(String uuid) {
+    String getSearchKey(String uuid) {
         return uuid;
     }
 
