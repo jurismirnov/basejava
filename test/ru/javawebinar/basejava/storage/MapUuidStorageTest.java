@@ -8,10 +8,10 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MapStorageTest extends AbstractArrayStorageTest {
+public class MapUuidStorageTest extends AbstractArrayStorageTest {
 
-    public MapStorageTest() {
-        super(new MapStorage());
+    public MapUuidStorageTest() {
+        super(new MapUuidStorage());
     }
 
     @Override

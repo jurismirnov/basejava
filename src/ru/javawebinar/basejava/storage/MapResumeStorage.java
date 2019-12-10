@@ -2,14 +2,17 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    boolean isExist(Object uuid) {
-        return storage.containsKey((String) uuid);
+    boolean isExist(Object resume) {
+        return storage.containsValue(resume);
     }
 
     @Override
@@ -19,22 +22,23 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     void doUpdate(Resume resume, Object key) {
-        storage.replace((String) key, resume);
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    Resume doGet(Object key) {
-        return storage.get((String) key);
+    Resume doGet(Object resume) {
+       return (Resume) resume;
     }
 
     @Override
-    void doDelete(Object key) {
-        storage.remove((String) key);
+    void doDelete(Object resume) {
+        Resume res = (Resume) resume;
+        storage.remove(res.getUuid());
     }
 
     @Override
-    String getSearchKey(String uuid) {
-        return uuid;
+    Object getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
@@ -44,7 +48,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resumeList = new ArrayList<Resume>(storage.values());
+        List<Resume> resumeList = new ArrayList<>(storage.values());
         resumeList.sort(AbstractArrayStorage.RESUME_FULL_NAME_COMPARATOR);
         return resumeList;
     }
