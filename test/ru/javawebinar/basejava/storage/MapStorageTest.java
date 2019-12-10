@@ -7,7 +7,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class MapStorageTest extends AbstractArrayStorageTest {
 
@@ -23,10 +22,9 @@ public class MapStorageTest extends AbstractArrayStorageTest {
 
     @Override
     @Test
-    public void getAll() {
-        ArrayList<Resume> expected = new ArrayList<>(Arrays.asList(R1, R2, R3, R4));
-        ArrayList<Resume> allResume = new ArrayList<>(Arrays.asList(storage.getAll()));
-        Collections.sort(allResume);
+    public void getAllSorted() {
+        ArrayList<Resume> expected = new ArrayList<>(Arrays.asList(R4, R3, R2, R1));
+        ArrayList<Resume> allResume = new ArrayList<>(storage.getAllSorted());
         Assert.assertEquals(expected.size(), allResume.size());
         Assert.assertEquals(expected, allResume);
     }

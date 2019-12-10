@@ -11,10 +11,10 @@ public class MainTestSortedArrayStorage {
     private static final SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume("uuid1");
-        Resume r2 = new Resume("uuid3");
-        Resume r3 = new Resume("uuid2");
-        Resume r4 = new Resume("uuid11");
+        Resume r1 = new Resume("uuid1","Sacha Sidorova");
+        Resume r2 = new Resume("uuid3","Maria Vasina");
+        Resume r3 = new Resume("uuid2","Boris Petrov");
+        Resume r4 = new Resume("uuid11","Anton Ivanov");
 
 
         ARRAY_STORAGE.save(r1);
@@ -50,7 +50,7 @@ public class MainTestSortedArrayStorage {
 
     private static void printAll() {
         System.out.println("\nPrint all:");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
+        for (Resume r : ARRAY_STORAGE.getAllSorted()) {
             System.out.println(r);
         }
     }
