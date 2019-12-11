@@ -1,23 +1,16 @@
 package ru.javawebinar.basejava.storage;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MapUuidStorageTest extends AbstractArrayStorageTest {
+public class MapUuidStorageTest extends CollectionStorageTest {
 
     public MapUuidStorageTest() {
         super(new MapUuidStorage());
-    }
-
-    @Override
-    @Ignore
-    @Test
-    public void saveOverflow() {
     }
 
     @Override

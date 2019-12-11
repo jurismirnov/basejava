@@ -44,9 +44,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resumeList = new ArrayList<>(storage.values());
-        resumeList.sort(AbstractArrayStorage.RESUME_FULL_NAME_COMPARATOR);
-        return resumeList;
+       return doSort(new ArrayList<>(storage.values()));
     }
 
     @Override
