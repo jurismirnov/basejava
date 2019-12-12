@@ -41,6 +41,11 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    List<Resume> getAll() {
+        return storage;
+    }
+
+    @Override
     boolean isExist(Object getSearchKeyOutput) {
         return getSearchKeyOutput != null;
     }
@@ -48,10 +53,6 @@ public class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    public List<Resume> getAllSorted() {
-        return doSort(storage);
     }
 
     @Override

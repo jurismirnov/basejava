@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    protected static final Comparator<Resume> COMMON_RESUME_COMPARATOR = Comparator.comparing(o -> (o.getFullName() + o.getUuid()));
+    protected static final Comparator<Resume> COMMON_RESUME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     abstract boolean isExist(Object searchKey);
 
@@ -21,6 +21,8 @@ public abstract class AbstractStorage implements Storage {
     abstract void doDelete(Object key);
 
     abstract Object getSearchKey(String uuid);
+
+    abstract List<Resume> getAll();
 
     public void save(Resume resume) {
         Object result = doesNotExist(resume.getUuid());
@@ -58,8 +60,13 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    public List<Resume> doSort(List<Resume> allResume) {
+    private List<Resume> doSort(List<Resume> allResume) {
         allResume.sort(AbstractArrayStorage.COMMON_RESUME_COMPARATOR);
         return allResume;
     }
+
+    public List<Resume> getAllSorted() {
+        return doSort(getAll());
+    }
+
 }
