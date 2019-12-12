@@ -12,14 +12,21 @@ public class Resume {
     private String uuid;
     private String fullName;
 
-
     public Resume(String fullName) {
-       this(UUID.randomUUID().toString(),fullName);
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
         this.uuid = Objects.requireNonNull(uuid, "Resume uuid can not be null.");
         this.fullName = Objects.requireNonNull(fullName, "Resume fullName can not be null.");
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     @Override
@@ -39,13 +46,5 @@ public class Resume {
     @Override
     public String toString() {
         return "Resume{" + "uuid='" + uuid + '\'' + ", fullName='" + fullName + '\'' + '}';
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 }
