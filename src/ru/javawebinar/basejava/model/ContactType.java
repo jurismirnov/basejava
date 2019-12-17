@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.model;
 
-public enum Contacts {
+import java.util.Objects;
+
+public enum ContactType {
     PHONENR("Телефон"),
     SKYPE("Skype"),
     EMAIL("Почта"),
@@ -11,8 +13,8 @@ public enum Contacts {
 
     private String title;
 
-    Contacts(String title) {
-        this.title = title;
+    ContactType(String title) {
+        this.title = Objects.requireNonNull(title, "The field can't be null");
     }
 
     public String getTitle() {

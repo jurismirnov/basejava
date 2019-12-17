@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class SimpleText extends Section {
+public class SectionText extends Section {
     private String text;
 
-    public SimpleText(String text) {
-        this.text = text;
+    public SectionText(String text) {
+        this.text = Objects.requireNonNull(text, "Text field can't be null");
     }
 
     public String getText() {
@@ -21,7 +21,7 @@ public class SimpleText extends Section {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleText that = (SimpleText) o;
+        SectionText that = (SectionText) o;
         return Objects.equals(text, that.text);
     }
 

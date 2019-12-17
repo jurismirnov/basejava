@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class ExPosition {
+public class Organisation {
     private String firmName;
     private String httpLink;
     private LocalDate startDate;
@@ -11,12 +11,12 @@ public class ExPosition {
     private String position;
     private String description;
 
-    public ExPosition(String firmName, String httpLink, LocalDate startDate, LocalDate endDate, String position, String description) {
-        this.firmName = firmName;
+    public Organisation(String firmName, String httpLink, LocalDate startDate, LocalDate endDate, String position, String description) {
+        this.firmName = Objects.requireNonNull(firmName,"The field firmName can't be null");
         this.httpLink = httpLink;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.position = position;
+        this.startDate = Objects.requireNonNull(startDate,"The field startDate can't be null");
+        this.endDate = Objects.requireNonNull(endDate,"The field endDate can't be null");
+        this.position = Objects.requireNonNull(position,"The field position can't be null");
         this.description = description;
     }
 
@@ -36,7 +36,7 @@ public class ExPosition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExPosition that = (ExPosition) o;
+        Organisation that = (Organisation) o;
         return Objects.equals(firmName, that.firmName) &&
                 Objects.equals(httpLink, that.httpLink) &&
                 Objects.equals(startDate, that.startDate) &&
