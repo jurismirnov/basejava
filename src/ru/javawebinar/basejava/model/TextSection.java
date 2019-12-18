@@ -2,10 +2,10 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class SectionText extends Section {
+public class TextSection extends Section {
     private String text;
 
-    public SectionText(String text) {
+    public TextSection(String text) {
         this.text = Objects.requireNonNull(text, "Text field can't be null");
     }
 
@@ -21,7 +21,7 @@ public class SectionText extends Section {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SectionText that = (SectionText) o;
+        TextSection that = (TextSection) o;
         return Objects.equals(text, that.text);
     }
 

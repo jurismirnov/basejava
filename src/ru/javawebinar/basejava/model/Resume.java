@@ -9,12 +9,10 @@ import java.util.UUID;
  * Initial resume class
  */
 public class Resume {
-
     // Unique identifier
     private String uuid;
     private String fullName;
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-
     private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {

@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Organisation;
-import ru.javawebinar.basejava.model.SectionOrganisationList;
+import ru.javawebinar.basejava.model.OrganisationListSection;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
-import ru.javawebinar.basejava.model.SectionText;
-import ru.javawebinar.basejava.model.SectionTextList;
+import ru.javawebinar.basejava.model.TextSection;
+import ru.javawebinar.basejava.model.TextListSection;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,15 +24,15 @@ public class MainResumeTestData {
         r1.setContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         r1.setContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        r1.setSection(SectionType.CURRENT_POSITIOIN, new SectionText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
-        r1.setSection(SectionType.PERSONAL, new SectionText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры"));
-        r1.setSection(SectionType.ACHIEVEMENT, new SectionTextList(new ArrayList<>(Arrays.asList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.1",
+        r1.setSection(SectionType.CURRENT_POSITIOIN, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        r1.setSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры"));
+        r1.setSection(SectionType.ACHIEVEMENT, new TextListSection(new ArrayList<>(Arrays.asList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.1",
                 "Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.",
                 "Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера",
                 "Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.",
                 "Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов (SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и мониторинга системы по JMX (Jython/ Django).",
                 "Реализация протоколов по приему платежей всех основных платежных системы России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа"))));
-        r1.setSection(SectionType.QUALIFICATIONS, new SectionTextList(new ArrayList<>(Arrays.asList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
+        r1.setSection(SectionType.QUALIFICATIONS, new TextListSection(new ArrayList<>(Arrays.asList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
                 "Version control: Subversion, Git, Mercury, ClearCase, Perforce",
                 "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle,",
                 "MySQL, SQLite, MS SQL, HSQLDB",
@@ -50,7 +50,7 @@ public class MainResumeTestData {
 
 
         r1.setSection(SectionType.EXPERIENCE,
-                new SectionOrganisationList(new ArrayList<Organisation>(Arrays.asList(
+                new OrganisationListSection(new ArrayList<Organisation>(Arrays.asList(
                         new Organisation("Java Online Projects", "http://javaops.ru/",
                                 LocalDate.of(2013, 10, 1), LocalDate.now(), "Автор проекта.",
                                 "Создание, организация и проведение Java онлайн проектов и стажировок"),
@@ -78,7 +78,7 @@ public class MainResumeTestData {
                 ))));
 
         r1.setSection(SectionType.EDUCATION,
-                new SectionOrganisationList(new ArrayList<Organisation>(Arrays.asList(
+                new OrganisationListSection(new ArrayList<Organisation>(Arrays.asList(
                         new Organisation("Coursera", "https://www.coursera.org/course/progfun",
                                 LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1), "\"Functional Programming Principles in Scala\" by Martin Odersky",
                                 null),

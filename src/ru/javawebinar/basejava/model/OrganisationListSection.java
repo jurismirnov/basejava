@@ -3,12 +3,11 @@ package ru.javawebinar.basejava.model;
 import java.util.List;
 import java.util.Objects;
 
-public class SectionOrganisationList extends Section {
+public class OrganisationListSection extends Section {
     private List<Organisation> organisationList;
 
-    public SectionOrganisationList(List<Organisation> organisationList) {
-
-        this.organisationList = Objects.requireNonNull(organisationList,"The organisationList can't be null");
+    public OrganisationListSection(List<Organisation> organisationList) {
+        this.organisationList = Objects.requireNonNull(organisationList, "The organisationList can't be null");
     }
 
     public List<Organisation> getOrganisationList() {
@@ -23,7 +22,7 @@ public class SectionOrganisationList extends Section {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SectionOrganisationList that = (SectionOrganisationList) o;
+        OrganisationListSection that = (OrganisationListSection) o;
         return organisationList.equals(that.organisationList);
     }
 
@@ -34,8 +33,6 @@ public class SectionOrganisationList extends Section {
 
     @Override
     public String toString() {
-        return "SectionOrganisationList{" +
-                "organisationList=" + organisationList +
-                '}';
+        return "SectionOrganisationList{" + "organisationList=" + organisationList + '}';
     }
 }
