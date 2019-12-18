@@ -7,53 +7,53 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
     private static final Comparator<Resume> COMMON_RESUME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
-    abstract boolean isExist(Object searchKey);
+    abstract boolean isExist(SK searchKey);
 
-    abstract void doSave(Resume resume, Object key);
+    abstract void doSave(Resume resume, SK key);
 
-    abstract void doUpdate(Resume resume, Object key);
+    abstract void doUpdate(Resume resume, SK key);
 
-    abstract Resume doGet(Object key);
+    abstract Resume doGet(SK key);
 
-    abstract void doDelete(Object key);
+    abstract void doDelete(SK key);
 
-    abstract Object getSearchKey(String uuid);
+    abstract SK getSearchKey(String uuid);
 
     abstract List<Resume> getAll();
 
     public void save(Resume resume) {
-        Object result = doesNotExist(resume.getUuid());
+        SK result = doesNotExist(resume.getUuid());
         doSave(resume, result);
     }
 
     public void update(Resume resume) {
-        Object result = doesExist(resume.getUuid());
+        SK result = doesExist(resume.getUuid());
         doUpdate(resume, result);
     }
 
     public void delete(String uuid) {
-        Object result = doesExist(uuid);
+        SK result = doesExist(uuid);
         doDelete(result);
     }
 
     public Resume get(String uuid) {
-        Object result = doesExist(uuid);
+        SK result = doesExist(uuid);
         return doGet(result);
     }
 
-    private Object doesExist(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK doesExist(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    private Object doesNotExist(String uuid) {
-        Object searchKey = getSearchKey(uuid);
+    private SK doesNotExist(String uuid) {
+        SK searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }

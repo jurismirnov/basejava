@@ -1,12 +1,12 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.MapUuidStorage;
+import ru.javawebinar.basejava.storage.SortedArrayStorage;
 
 import java.util.List;
 
 public class MainTestMapUuidStorage {
-    private static final MapUuidStorage MAP_STORAGE = new MapUuidStorage();
+    private static final SortedArrayStorage.MapUuidStorage MAP_STORAGE = new SortedArrayStorage.MapUuidStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1", "Sacha Sidorova");
