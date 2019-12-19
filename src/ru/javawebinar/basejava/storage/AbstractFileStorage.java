@@ -75,7 +75,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     List<Resume> getAll() {
         ArrayList<Resume> allResume = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
+        for (File file : checkDirectoryNotNull()) {
             allResume.add(doGet(file));
         }
         return allResume;
@@ -83,21 +83,21 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        checkDirectoryNotNull();
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
+        for (File file : checkDirectoryNotNull()) {
             doDelete(file);
         }
     }
 
     @Override
     public int size() {
-        checkDirectoryNotNull();
-        return Objects.requireNonNull(directory.list()).length;
+        return checkDirectoryNotNull().length;
     }
 
-    private void checkDirectoryNotNull() {
-        if (directory.listFiles() == null || directory.list() == null) {
+    private File[] checkDirectoryNotNull() {
+        File[] directoryArray = directory.listFiles();
+        if (directoryArray == null) {
             throw new StorageException("File list is null  ", directory.getName());
         }
+        return directoryArray;
     }
 }
