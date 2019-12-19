@@ -2,6 +2,6 @@ package ru.javawebinar.basejava.storage;
 
 public class MapUuidStorageTest extends AbstractStorageTest {
     public MapUuidStorageTest() {
-        super(new SortedArrayStorage.MapUuidStorage());
+        super(new MapUuidStorage());
     }
  }

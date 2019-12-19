@@ -1,16 +1,16 @@
 package ru.javawebinar.basejava;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MainFileListRecursive {
     private static void fileListRecursive(File file) {
-        File[] fileArray = file.listFiles();
+        File[] fileArray = Objects.requireNonNull(file.listFiles());
         for (File f : fileArray) {
             if (f.isDirectory()) {
-                System.out.println(f.getName() + " directory");
                 fileListRecursive(f);
             } else {
-                System.out.println(f.getName() + " file");
+                System.out.println(f.getName());
             }
         }
     }

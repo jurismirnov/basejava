@@ -36,10 +36,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     void doSave(Resume resume, File file) {
         try {
             file.createNewFile();
-            doWrite(resume, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Can not create file", file.getName(), e);
         }
+        doUpdate(resume, file);
     }
 
     @Override
@@ -62,7 +62,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     void doDelete(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException(file.getName(), "Can not delete the file" + file.getName());
+        }
     }
 
     @Override
@@ -74,24 +76,28 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     List<Resume> getAll() {
         ArrayList<Resume> allResume = new ArrayList<>();
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            try {
-                allResume.add(doRead(file));
-            } catch (IOException e) {
-                throw new StorageException("IO error", file.getName(), e);
-            }
+            allResume.add(doGet(file));
         }
-        return null;
+        return allResume;
     }
 
     @Override
     public void clear() {
+        checkDirectoryNotNull();
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            file.delete();
+            doDelete(file);
         }
     }
 
     @Override
     public int size() {
+        checkDirectoryNotNull();
         return Objects.requireNonNull(directory.list()).length;
+    }
+
+    private void checkDirectoryNotNull() {
+        if (directory.listFiles() == null || directory.list() == null) {
+            throw new StorageException("File list is null  ", directory.getName());
+        }
     }
 }
