@@ -1,15 +1,18 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Epoch {
+public class Position implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private LocalDate startDate;
     private LocalDate endDate;
     private String position;
     private String description;
 
-    public Epoch(LocalDate startDate, LocalDate endDate, String position, String description) {
+    public Position(LocalDate startDate, LocalDate endDate, String position, String description) {
         this.startDate = Objects.requireNonNull(startDate, "The field startDate can't be null");
         this.endDate = Objects.requireNonNull(endDate, "The field endDate can't be null");
         this.position = Objects.requireNonNull(position, "The field position can't be null");
@@ -20,11 +23,11 @@ public class Epoch {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Epoch epoch = (Epoch) o;
-        return startDate.equals(epoch.startDate) &&
-                endDate.equals(epoch.endDate) &&
-                position.equals(epoch.position) &&
-                Objects.equals(description, epoch.description);
+        Position position = (Position) o;
+        return startDate.equals(position.startDate) &&
+                endDate.equals(position.endDate) &&
+                this.position.equals(position.position) &&
+                Objects.equals(description, position.description);
     }
 
     @Override

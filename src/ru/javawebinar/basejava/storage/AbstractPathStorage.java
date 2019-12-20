@@ -9,33 +9,35 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    protected File directory;
+public class AbstractPathStorage extends AbstractStorage<Path>{
+    protected Path path;
 
-    protected AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "diractory must be not null");
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
+    protected AbstractPathStorage(Path path) {
+        Objects.requireNonNull(path, "diractory must be not null");
+        if (!path.isDirectory()) {
+            throw new IllegalArgumentException(path.getAbsolutePath() + "is not directory");
         }
-        if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " directory is not readable/writable");
+        if (!path.canRead() || !path.canWrite()) {
+            throw new IllegalArgumentException(path.getAbsolutePath() + " directory is not readable/writable");
         }
-        this.directory = directory;
+        this.path = path;
     }
 
     @Override
-    boolean isExist(File file) {
-        return file.exists();
+    boolean isExist(Path path) {
+        return Paths.;
     }
 
     @Override
-    void doSave(Resume resume, File file) {
+    void doSave(Resume resume, Path path) {
         try {
-            file.createNewFile();
+            path.createNewFile();
         } catch (IOException e) {
             throw new StorageException("Can not create file", file.getName(), e);
         }
@@ -69,7 +71,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     File getSearchKey(String uuid) {
-        return new File(directory, uuid);
+        return new File(path, uuid);
     }
 
     @Override
@@ -94,10 +96,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     private File[] checkDirectoryNotNull() {
-        File[] directoryArray = directory.listFiles();
+        File[] directoryArray = path.listFiles();
         if (directoryArray == null) {
-            throw new StorageException("File list is null  ", directory.getName());
+            throw new StorageException("File list is null  ", path.getName());
         }
         return directoryArray;
     }
+
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class TextListSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private List<String> records;
 
     public TextListSection(List<String> records) {
