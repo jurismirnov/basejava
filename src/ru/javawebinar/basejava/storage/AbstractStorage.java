@@ -4,17 +4,11 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractStorage<SK> implements Storage {
     private static final Comparator<Resume> COMMON_RESUME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
-
-    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     abstract boolean isExist(SK searchKey);
 
