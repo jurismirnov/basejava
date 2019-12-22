@@ -8,10 +8,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,20 +30,12 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null, e);
-        }
+        pathsList().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        try {
-            return (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Can not count the files", null, e);
-        }
+        return (int) pathsList().count();
     }
 
     @Override
@@ -64,7 +54,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.exists(path, LinkOption.NOFOLLOW_LINKS);
+        return Files.isRegularFile(path);
     }
 
     @Override
@@ -91,23 +81,20 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            //deleting file failed
             throw new StorageException("Path delete error", path.getFileName().toString(), e);
         }
     }
 
     @Override
     protected List<Resume> getAll() {
-        Stream<Path> paths = null;
+        return pathsList().map(this::doGet).collect(Collectors.toList());
+    }
+
+    private Stream<Path> pathsList() {
         try {
-            paths = Files.list(directory);
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Directory read error", null, e);
         }
-        List<Resume> list = new ArrayList<>();
-        for (Path path : paths.collect(Collectors.toList())) {
-            list.add(doGet(path));
-        }
-        return list;
     }
 }
