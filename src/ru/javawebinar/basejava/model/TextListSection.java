@@ -8,6 +8,9 @@ public class TextListSection extends Section {
 
     private List<String> records;
 
+    public TextListSection() {
+    }
+
     public TextListSection(List<String> records) {
         this.records = Objects.requireNonNull(records,"The Text list can't be null");
     }

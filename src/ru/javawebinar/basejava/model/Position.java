@@ -12,6 +12,9 @@ public class Position implements Serializable {
     private String position;
     private String description;
 
+    public Position() {
+    }
+
     public Position(LocalDate startDate, LocalDate endDate, String position, String description) {
         this.startDate = Objects.requireNonNull(startDate, "The field startDate can't be null");
         this.endDate = Objects.requireNonNull(endDate, "The field endDate can't be null");
@@ -43,5 +46,21 @@ public class Position implements Serializable {
                 ", position='" + position + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

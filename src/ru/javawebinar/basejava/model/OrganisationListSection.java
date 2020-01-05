@@ -6,6 +6,9 @@ import java.util.Objects;
 public class OrganisationListSection extends Section {
     private List<Organisation> organisationList;
 
+    public OrganisationListSection() {
+    }
+
     public OrganisationListSection(List<Organisation> organisationList) {
         this.organisationList = Objects.requireNonNull(organisationList, "The organisationList can't be null");
     }

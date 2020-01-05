@@ -11,10 +11,25 @@ public class Organisation implements Serializable {
     private String httpLink;
     private List<Position> positionList;
 
+    public Organisation() {
+    }
+
     public Organisation(String firmName, String httpLink, List<Position> positionList) {
         this.firmName = Objects.requireNonNull(firmName, "The field firmName can't be null");
         this.httpLink = httpLink;
         this.positionList = positionList;
+    }
+
+    public String getFirmName() {
+        return firmName;
+    }
+
+    public String getHttpLink() {
+        return httpLink;
+    }
+
+    public List<Position> getPositionList() {
+        return positionList;
     }
 
     @Override
