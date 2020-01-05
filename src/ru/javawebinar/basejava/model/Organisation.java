@@ -25,7 +25,7 @@ public class Organisation implements Serializable {
     }
 
     public String getHttpLink() {
-        return httpLink;
+        return httpLink == null ? "" : httpLink;
     }
 
     public List<Position> getPositionList() {
