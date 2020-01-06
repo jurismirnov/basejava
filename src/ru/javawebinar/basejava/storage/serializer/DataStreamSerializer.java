@@ -34,31 +34,7 @@ public class DataStreamSerializer implements StreamSerializer {
             writeCollection(dos, resume.getSections().entrySet(), entry -> {
                 SectionType type = entry.getKey();
                 Section section = entry.getValue();
-                dos.writeUTF(type.name());
-                String typeString = type.toString();
-                switch (typeString) {
-                    case "PERSONAL":
-                    case "OBJECTIVE":
-                        dos.writeUTF(((TextSection) section).getText());
-                        break;
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATIONS":
-                        writeCollection(dos, ((TextListSection) section).getRecords(), dos::writeUTF);
-                        break;
-                    case "EXPERIENCE":
-                    case "EDUCATION":
-                        writeCollection(dos, ((OrganisationListSection) section).getOrganisationList(), organisation -> {
-                            dos.writeUTF(organisation.getFirmName());
-                            dos.writeUTF(organisation.getHttpLink());
-                            writeCollection(dos, organisation.getPositionList(), position -> {
-                                writeLocalDate(position.getStartDate(), dos);
-                                writeLocalDate(position.getEndDate(), dos);
-                                dos.writeUTF(position.getPosition());
-                                dos.writeUTF(position.getDescription());
-                            });
-                        });
-                        break;
-                }
+                writeSection(dos, section, type);
             });
         }
     }
@@ -83,17 +59,42 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
+    private void writeSection(DataOutputStream dos, Section section, SectionType type) throws IOException {
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
+                dos.writeUTF(((TextSection) section).getText());
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                writeCollection(dos, ((TextListSection) section).getRecords(), dos::writeUTF);
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                writeCollection(dos, ((OrganisationListSection) section).getOrganisationList(), organisation -> {
+                    dos.writeUTF(organisation.getFirmName());
+                    dos.writeUTF(organisation.getHttpLink());
+                    writeCollection(dos, organisation.getPositionList(), position -> {
+                        writeLocalDate(position.getStartDate(), dos);
+                        writeLocalDate(position.getEndDate(), dos);
+                        dos.writeUTF(position.getPosition());
+                        dos.writeUTF(position.getDescription());
+                    });
+                });
+                break;
+        }
+    }
+
     private Section readSection(DataInputStream dis, SectionType type) throws IOException {
-        String typeString = type.toString();
-        switch (typeString) {
-            case "PERSONAL":
-            case "OBJECTIVE":
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
                 return new TextSection(dis.readUTF());
-            case "ACHIEVEMENT":
-            case "QUALIFICATIONS":
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
                 return new TextListSection(readList(dis, dis::readUTF));
-            case "EXPERIENCE":
-            case "EDUCATION":
+            case EXPERIENCE:
+            case EDUCATION:
                 return new OrganisationListSection(
                         readList(dis, () -> new Organisation(
                                 dis.readUTF(), dis.readUTF(),
