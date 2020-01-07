@@ -16,8 +16,10 @@ public class Position implements Serializable {
     }
 
     public Position(LocalDate startDate, LocalDate endDate, String position, String description) {
-        this.startDate = Objects.requireNonNull(startDate.withDayOfMonth(1), "The field startDate can't be null");
-        this.endDate = Objects.requireNonNull(endDate.withDayOfMonth(1), "The field endDate can't be null");
+        Objects.requireNonNull(startDate, "The field startDate can't be null");
+        Objects.requireNonNull(endDate, "The field endDate can't be null");
+        this.startDate = startDate.withDayOfMonth(1);
+        this.endDate = endDate.withDayOfMonth(1);
         this.position = Objects.requireNonNull(position, "The field position can't be null");
         this.description = description;
     }
