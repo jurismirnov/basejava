@@ -1,7 +1,7 @@
 package ru.javawebinar.basejava;
 
+
 public class MainDeadLock {
-    private static int counter;
     private static final String LOCK1 = "lock1";
     private static final String LOCK2 = "lock2";
 
@@ -31,4 +31,6 @@ public class MainDeadLock {
         } catch (InterruptedException ignored) {
         }
     }
+
+
 }
