@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MainTestStream {
-
     private static int minValue(int[] values) {
         List<Integer> input = Arrays.stream(values)
                 .distinct()
