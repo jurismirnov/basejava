@@ -22,6 +22,7 @@ public class MainTestStream {
                 .sorted().reduce((x, y) -> x * 10 + y).getAsInt();
     }
 
+
     private static List<Integer> oddOrEven(List<Integer> integers) {
         boolean even = integers.stream().reduce(Integer::sum).orElse(0) % 2 != 0;
         return integers.stream().filter(even ? x -> x % 2 != 0 : x -> x % 2 == 0).collect(Collectors.toList());
