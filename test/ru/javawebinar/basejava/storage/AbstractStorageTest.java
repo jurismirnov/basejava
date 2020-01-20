@@ -3,10 +3,11 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.Config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,15 +21,37 @@ public abstract class AbstractStorageTest {
     protected final static String UUID2 = "uuid2";
     protected final static String UUID3 = "uuid3";
     protected final static String UUID4 = "uuid4";
+    protected final static String UUID_TEST = "uuid_test";
     protected final static String DUMMY = "dummy";
     protected final static String FULL_NAME1 = "Sacha Sidorova";
     protected final static String FULL_NAME2 = "Maria Vasina";
     protected final static String FULL_NAME3 = "Boris Petrov";
     protected final static String FULL_NAME4 = "Anton Ivanov";
-    protected final static Resume R1 = new Resume(UUID1, FULL_NAME1);
-    protected final static Resume R2 = new Resume(UUID2, FULL_NAME2);
-    protected final static Resume R3 = new Resume(UUID3, FULL_NAME3);
-    protected final static Resume R4 = new Resume(UUID4, FULL_NAME4);
+    protected final static String FULL_NAME_TEST = "Test Testov";
+    private static final Resume R1;
+    private static final Resume R2;
+    private static final Resume R3;
+    private static final Resume R4;
+    private static final Resume TEST;
+
+    static {
+        R1 = new Resume(UUID1, FULL_NAME1);
+        R2 = new Resume(UUID2, FULL_NAME2);
+        R3 = new Resume(UUID3, FULL_NAME3);
+        R4 = new Resume(UUID4, FULL_NAME4);
+        TEST = new Resume(UUID_TEST, FULL_NAME_TEST);
+
+        R1.addContact(ContactType.EMAIL, "mail1@ya.ru");
+        R1.addContact(ContactType.PHONENR, "11111");
+        R2.addContact(ContactType.EMAIL, "mail2@ya.ru");
+        R2.addContact(ContactType.PHONENR, "22222");
+        R3.addContact(ContactType.EMAIL, "mail3@ya.ru");
+        R3.addContact(ContactType.PHONENR, "33333");
+        R4.addContact(ContactType.EMAIL, "mail4@ya.ru");
+        R4.addContact(ContactType.PHONENR, "44444");
+        TEST.addContact(ContactType.EMAIL, "mail_test@ya.ru");
+        TEST.addContact(ContactType.PHONENR, "test_test");
+    }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -52,20 +75,21 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        Resume newResume = new Resume("uuid_save", "test");
-        storage.save(newResume);
+        storage.save(TEST);
         Assert.assertEquals(5, storage.size());
-        Assert.assertEquals(newResume, storage.get("uuid_save"));
+        Assert.assertEquals(TEST, storage.get(UUID_TEST));
     }
 
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
-        storage.save(new Resume(UUID2, FULL_NAME2));
+        storage.save(R2);
     }
 
     @Test
     public void update() {
-        Resume resume = new Resume(UUID2, FULL_NAME2);
+        Resume resume = new Resume(UUID2, FULL_NAME_TEST);
+        resume.addContact(ContactType.PHONENR, "12435687");
+        resume.addContact(ContactType.EMAIL, "1243@5687.ru");
         Assert.assertNotSame(resume, storage.get(UUID2));
         storage.update(resume);
         Assert.assertEquals(resume, storage.get(UUID2));
