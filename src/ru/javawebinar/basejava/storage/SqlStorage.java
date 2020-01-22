@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +34,15 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-                    try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name=? WHERE uuid=?;\n" +
-                            "DELETE FROM contact WHERE resume_uuid=?;")) {
+                    try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name=? WHERE uuid=?;")) {
                         ps.setString(1, r.getFullName());
                         ps.setString(2, r.getUuid());
-                        ps.setString(3, r.getUuid());
                         ps.execute();
                         if (ps.executeUpdate() < 1) {
                             throw new NotExistStorageException("Update: Resume not exists");
                         }
                     }
+                    dbDeleteContact(r, conn);
                     dbInsertContact(r, conn);
                     return null;
                 }
@@ -86,8 +86,8 @@ public class SqlStorage implements Storage {
     public void delete(String uuid) {
         sqlHelper.execute("DELETE FROM resume WHERE uuid=?", ps -> {
             ps.setString(1, uuid);
-            boolean rs = ps.execute();
-            if (!rs) {
+            int rs = ps.executeUpdate();
+            if (rs == 0) {
                 throw new NotExistStorageException("Delete: Resume not exists");
             }
             return null;
@@ -96,25 +96,19 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.execute("SELECT * FROM resume r JOIN contact c ON r.uuid=c.resume_uuid ORDER BY r.full_name,r.uuid", ps -> {
+        return sqlHelper.execute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid=c.resume_uuid ORDER BY r.full_name,r.uuid", ps -> {
             ResultSet rs = ps.executeQuery();
-            List<Resume> resumeList = new ArrayList<>();
-            String compareTo = "";
-            Resume resume = null;
-            String uuidTmp;
+            Map<String, Resume> map = new LinkedHashMap<>();
             while (rs.next()) {
-                uuidTmp = rs.getString("uuid").trim();
-                if (!uuidTmp.equals(compareTo)) {
-                    if (resume != null) {
-                        resumeList.add(resume);
-                    }
-                    resume = new Resume(uuidTmp, rs.getString("full_name"));
-                    compareTo = uuidTmp;
+                String uuid = rs.getString("uuid");
+                Resume resume = map.get(uuid);
+                if (resume == null) {
+                    resume = new Resume(uuid, rs.getString("full_name"));
+                    map.put(uuid, resume);
                 }
                 resumeAddContact(resume, rs);
             }
-            resumeList.add(resume);
-            return resumeList;
+            return new ArrayList<>(map.values());
         });
     }
 
@@ -138,6 +132,13 @@ public class SqlStorage implements Storage {
                 ps.addBatch();
             }
             ps.executeBatch();
+        }
+    }
+
+    private void dbDeleteContact(Resume resume, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid=?")) {
+            ps.setString(1, resume.getUuid());
+            ps.execute();
         }
     }
 
