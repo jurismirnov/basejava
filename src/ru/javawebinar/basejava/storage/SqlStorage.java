@@ -101,13 +101,7 @@ public class SqlStorage implements Storage {
             Map<String, Resume> map = new LinkedHashMap<>();
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
-                Resume resume = map.computeIfAbsent(uuid, k-> {
-                    try {
-                        return new Resume(uuid, rs.getString("full_name"));
-                    } catch (SQLException e) {
-                        throw new StorageException("", "Some error in getAllSorted()");
-                    }
-                });
+                Resume resume = map.computeIfAbsent(uuid, k -> sqlHelper.newResume(uuid, rs));
                 resumeAddContact(resume, rs);
             }
             return new ArrayList<>(map.values());
@@ -145,10 +139,9 @@ public class SqlStorage implements Storage {
     }
 
     private void resumeAddContact(Resume resume, ResultSet rs) throws SQLException {
-        if (rs.getObject("type")!=null) {
-            String value = rs.getString("value");
-            ContactType type = ContactType.valueOf(rs.getString("type"));
-            resume.addContact(type, value);
+        Object object = rs.getObject("type");
+        if (object != null) {
+            resume.addContact(ContactType.valueOf((String) object), rs.getString("value"));
         }
     }
 }

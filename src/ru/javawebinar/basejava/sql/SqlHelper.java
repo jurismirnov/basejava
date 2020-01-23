@@ -2,9 +2,11 @@ package ru.javawebinar.basejava.sql;
 
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
+import ru.javawebinar.basejava.model.Resume;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SqlHelper {
@@ -44,6 +46,14 @@ public class SqlHelper {
             } else {
                 throw new StorageException(e);
             }
+        }
+    }
+
+    public Resume newResume(String uuid, ResultSet rs){
+        try {
+            return new Resume(uuid, rs.getString("full_name"));
+        } catch (SQLException e) {
+            throw new StorageException("", "Some error in getAllSorted()");
         }
     }
 }
