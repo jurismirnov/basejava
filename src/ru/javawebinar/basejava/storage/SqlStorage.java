@@ -105,9 +105,8 @@ public class SqlStorage implements Storage {
                     try {
                         return new Resume(uuid, rs.getString("full_name"));
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        throw new StorageException("", "Some error in getAllSorted()");
                     }
-                    return null;
                 });
                 resumeAddContact(resume, rs);
             }
@@ -148,7 +147,8 @@ public class SqlStorage implements Storage {
     private void resumeAddContact(Resume resume, ResultSet rs) throws SQLException {
         if (rs.getObject("type")!=null) {
             String value = rs.getString("value");
-            resume.addContact(ContactType.valueOf(rs.getString("type")), value);
+            ContactType type = ContactType.valueOf(rs.getString("type"));
+            resume.addContact(type, value);
         }
     }
 }
