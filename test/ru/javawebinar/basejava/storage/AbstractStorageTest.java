@@ -43,8 +43,8 @@ public abstract class AbstractStorageTest {
 
         R1.addContact(ContactType.EMAIL, "mail1@ya.ru");
         R1.addContact(ContactType.PHONENR, "11111");
-        R2.addContact(ContactType.EMAIL, "mail2@ya.ru");
-        R2.addContact(ContactType.PHONENR, "22222");
+        // R2.addContact(ContactType.EMAIL, "mail2@ya.ru");
+        // R2.addContact(ContactType.PHONENR, "22222");
         R3.addContact(ContactType.EMAIL, "mail3@ya.ru");
         R3.addContact(ContactType.PHONENR, "33333");
         R4.addContact(ContactType.EMAIL, "mail4@ya.ru");
