@@ -7,7 +7,7 @@ import ru.javawebinar.basejava.model.Section;
 import java.io.Reader;
 import java.io.Writer;
 
-public class JsonParser  {
+public class JsonParser {
     private static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(Section.class, new JsonSectionAdapter())
             .create();
@@ -18,5 +18,13 @@ public class JsonParser  {
 
     public static <T> void write(T object, Writer writer) {
         GSON.toJson(object, writer);
+    }
+
+    public static <T> T read(String section_value, Class<T> sectionClass) {
+        return GSON.fromJson(section_value, sectionClass);
+    }
+
+    public static <T> String write(T section_value, Class<T> sectionClass) {
+        return GSON.toJson(section_value, sectionClass);
     }
 }

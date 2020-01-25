@@ -5,10 +5,16 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.SqlStorage;
 import ru.javawebinar.basejava.storage.Storage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 public class MainTestSqlStorage {
 
     public static void main(String[] args) {
-        Storage storage = new SqlStorage(Config.get().getDbUrl(), Config.get().getDbUser(), Config.get().getDbPassword());
+        Properties props = new Properties();
+        Storage sqlStorage = new SqlStorage(props.getProperty("dbUrl"), props.getProperty("dbUser"), props.getProperty("dbPassword"));
+        Storage storage ;//= new SqlStorage;(Config.get().getDbUrl(), Config.get().getDbUser(), Config.get().getDbPassword());
         final String UUID1 = "uuid1";
         final String UUID2 = "uuid2";
         final String UUID3 = "uuid3";
@@ -38,11 +44,21 @@ public class MainTestSqlStorage {
         R4.addContact(ContactType.EMAIL, "mail4@ya.ru");
         R4.addContact(ContactType.PHONENR, "44444");
 
-        storage.clear();
+        //storage.clear();
        // Resume newResume = new Resume("uuid_save", "test");
-        storage.save(R1);
-        Resume gotResume = storage.get("uuid1");
-        System.out.println(gotResume);
+        //storage.save(R1);
+        //storage.save(R2);
+        //storage.save(R3);
+        //storage.save(R4);
+        //Resume gotResume = storage.get("uuid1");
+        //System.out.println(gotResume);
+
+       //List<Resume> allResumeList = storage.getAllSorted();
+        //System.out.println(allResumeList);
+
+        //System.out.println(getResumeTable());
+        //response.getWriter().write(htmlStart + table + htmlEnd);
     }
+
 }
 

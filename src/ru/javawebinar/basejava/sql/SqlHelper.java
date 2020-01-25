@@ -2,7 +2,11 @@ package ru.javawebinar.basejava.sql;
 
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.Section;
+import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,7 +46,7 @@ public class SqlHelper {
             }
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException("Update: Resume already exists");
+                 throw new ExistStorageException("Update: Resume already exists");
             } else {
                 throw new StorageException(e);
             }
@@ -53,7 +57,29 @@ public class SqlHelper {
         try {
             return new Resume(uuid, rs.getString("full_name"));
         } catch (SQLException e) {
-            throw new StorageException("", "Some error in getAllSorted()");
+            throw new StorageException("", "Some error in SqlStorage.newResume");
+        }
+    }
+
+    public void resumeAddContact(Resume resume, ResultSet rs) {
+        try {
+            Object object = rs.getObject("contact_type");
+            if (object != null) {
+                resume.addContact(ContactType.valueOf((String) object), rs.getString("contact_value"));
+            }
+        } catch (SQLException e) {
+            throw new StorageException("", "Some error in SqlStorage.resumeAddContact");
+        }
+    }
+
+    public void resumeAddSection(Resume resume, ResultSet rs) {
+        try {
+            Object object = rs.getObject("section_type");
+            if (object != null) {
+                resume.addSection(SectionType.valueOf((String) object),JsonParser.read(rs.getString("section_value"), Section.class));
+            }
+        } catch (SQLException e) {
+            throw new StorageException("", "Some error in SqlStorage.resumeAddContact");
         }
     }
 }
