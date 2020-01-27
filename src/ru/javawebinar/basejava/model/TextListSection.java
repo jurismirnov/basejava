@@ -12,7 +12,7 @@ public class TextListSection extends Section {
     }
 
     public TextListSection(List<String> records) {
-        this.records = Objects.requireNonNull(records,"The Text list can't be null");
+        this.records = Objects.requireNonNull(records, "The Text list can't be null");
     }
 
     public List<String> getRecords() {
@@ -41,5 +41,10 @@ public class TextListSection extends Section {
         return "TextListSection{" +
                 "records=" + records +
                 '}';
+    }
+
+    @Override
+    public String asString() {
+        return String.join("\n", getRecords());
     }
 }

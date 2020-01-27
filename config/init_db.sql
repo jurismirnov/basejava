@@ -6,19 +6,20 @@ CREATE TABLE resume
 
 CREATE TABLE contact
 (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     resume_uuid TEXT NOT NULL REFERENCES resume (uuid) ON DELETE CASCADE,
     contact_type TEXT NOT NULL,
     contact_value TEXT NOT NULL
 );
+CREATE UNIQUE INDEX section_uuid_type_index ON public.contact (resume_uuid, contact_type);
 
 CREATE TABLE section
 (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     resume_uuid TEXT NOT NULL REFERENCES resume (uuid) ON DELETE CASCADE,
     section_type TEXT NOT NULL,
     section_value TEXT NOT NULL
 );
+CREATE UNIQUE INDEX contact_uuid_type_index ON public.contact (resume_uuid, section_type);
 
-CREATE UNIQUE INDEX contact_uuid_type_index ON public.contact (resume_uuid, type)
 

@@ -41,4 +41,9 @@ public class TextSection extends Section {
     public int hashCode() {
         return Objects.hash(text);
     }
+
+    @Override
+    public String asString() {
+        return getText();
+    }
 }

@@ -6,8 +6,7 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,6 +50,20 @@ public abstract class AbstractStorageTest {
         R4.addContact(ContactType.PHONENR, "44444");
         TEST.addContact(ContactType.EMAIL, "mail_test@ya.ru");
         TEST.addContact(ContactType.PHONENR, "test_test");
+
+        R1.addSection(SectionType.OBJECTIVE, new TextSection("R1 Bla bla bla Objective"));
+        R1.addSection(SectionType.PERSONAL, new TextSection("R1 Bla bla bla Personal"));
+        R1.addSection(SectionType.ACHIEVEMENT, new TextListSection(Arrays.asList("R1 Achievement1", "R1 Achievement2", "R1 Achievement3")));
+        R1.addSection(SectionType.QUALIFICATIONS, new TextListSection(Arrays.asList("R1 Qual1", "R1 Qual2", "R1 Qual3")));
+        R2.addSection(SectionType.OBJECTIVE, new TextSection("R2 Bla bla bla Objective"));
+        R2.addSection(SectionType.PERSONAL, new TextSection("R2 Bla bla bla Personal"));
+        R2.addSection(SectionType.ACHIEVEMENT, new TextListSection(Arrays.asList("R2 Achievement1", "R2 Achievement2", "R2 Achievement3")));
+        R2.addSection(SectionType.QUALIFICATIONS, new TextListSection(Arrays.asList("R2 Qual1", "R2 Qual2", "R2 Qual3")));
+        R3.addSection(SectionType.OBJECTIVE, new TextSection("R3 Bla bla bla Objective"));
+        R3.addSection(SectionType.PERSONAL, new TextSection("R3 Bla bla bla Personal"));
+        R3.addSection(SectionType.ACHIEVEMENT, new TextListSection(Arrays.asList("R3 Achievement1", "R3 Achievement2", "R3 Achievement3")));
+        R3.addSection(SectionType.QUALIFICATIONS, new TextListSection(Arrays.asList("R2 Qual1", "R2 Qual2", "R2 Qual3")));
+
     }
 
     protected AbstractStorageTest(Storage storage) {
