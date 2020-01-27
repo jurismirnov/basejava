@@ -99,7 +99,7 @@ public class SqlStorage implements Storage {
             return null;
         });
     }
-
+    //
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.transactionalExecute(conn -> {
