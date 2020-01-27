@@ -26,7 +26,7 @@ public class MainResumeTestData {
         r1.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         r1.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        r1.addSection(SectionType.CURRENT_POSITIOIN, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        r1.addSection(SectionType.CURRENT_POSITION, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         r1.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры"));
         r1.addSection(SectionType.ACHIEVEMENT, new TextListSection(new ArrayList<>(Arrays.asList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.1",
                 "Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.",

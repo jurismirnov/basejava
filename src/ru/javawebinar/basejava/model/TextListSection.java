@@ -42,9 +42,4 @@ public class TextListSection extends Section {
                 "records=" + records +
                 '}';
     }
-
-    @Override
-    public String asString() {
-        return String.join("\n", getRecords());
-    }
 }

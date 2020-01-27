@@ -99,6 +99,7 @@ public class SqlStorage implements Storage {
             return null;
         });
     }
+
     //
     @Override
     public List<Resume> getAllSorted() {
@@ -164,7 +165,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 String type = e.getKey().name();
                 ps.setString(2, type);
-                ps.setString(3, e.getValue().asString());
+                ps.setString(3, sectionToString(type, e.getValue()));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -179,23 +180,43 @@ public class SqlStorage implements Storage {
     }
 
     private void resumeAddContact(Resume resume, ResultSet rs) throws SQLException {
-        Object object = rs.getObject("contact_type");
-        if (object != null) {
-            resume.addContact(ContactType.valueOf((String) object), rs.getString("contact_value"));
+        String str = rs.getString("contact_type");
+        if (str != null) {
+            resume.addContact(ContactType.valueOf(str), rs.getString("contact_value"));
         }
     }
 
     private void resumeAddSection(Resume resume, ResultSet rs) throws SQLException {
-        Object object = rs.getObject("section_type");
+        String str = rs.getString("section_type");
         Section section;
-        if (object != null) {
+        if (str != null) {
             String[] sectionValue = rs.getString("section_value").split("\n");
             if (sectionValue.length == 1) {
                 section = new TextSection(sectionValue[0]);
             } else {
                 section = new TextListSection(Arrays.asList(sectionValue));
             }
-            resume.addSection(SectionType.valueOf((String) object), section);
+            resume.addSection(SectionType.valueOf(str), section);
         }
+    }
+
+    private String sectionToString(String type, Section section) {
+        String str=null;
+        switch (type) {
+            case "CURRENT_POSITION":
+            case "PERSONAL":
+            case "OBJECTIVE":
+                str = ((TextSection) section).getText();
+                break;
+            case "ACHIEVEMENT":
+            case "QUALIFICATIONS":
+                str = String.join("\n", ((TextListSection) section).getRecords());
+                break;
+
+            case "EDUCATION":
+            case "EXPERIENCE":
+                str = "";
+        }
+        return str;
     }
 }
