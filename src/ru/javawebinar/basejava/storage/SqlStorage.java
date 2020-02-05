@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -165,7 +166,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 String type = e.getKey().name();
                 ps.setString(2, type);
-                ps.setString(3, sectionToString(type, e.getValue()));
+                ps.setString(3, sectionToString(SectionType.valueOf(type), e.getValue()));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -187,40 +188,39 @@ public class SqlStorage implements Storage {
     }
 
     private void resumeAddSection(Resume resume, ResultSet rs) throws SQLException {
-        String type = rs.getString("section_type");
-        if (type != null) {
+        String sectionType =rs.getString("section_type");
+        if (sectionType != null) {
+        SectionType type = SectionType.valueOf(sectionType);
             switch (type) {
-                case "CURRENT_POSITION":
-                case "PERSONAL":
-                case "OBJECTIVE":
-                    resume.addSection(SectionType.valueOf(type), new TextSection(rs.getString("section_value")));
+                case OBJECTIVE:
+                case PERSONAL:
+                    resume.addSection(type, new TextSection(rs.getString("section_value")));
                     break;
-                case "ACHIEVEMENT":
-                case "QUALIFICATIONS":
-                    resume.addSection(SectionType.valueOf(type), new TextListSection(Arrays.asList(rs.getString("section_value").split("\n"))));
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    resume.addSection(type, new TextListSection(Arrays.asList(rs.getString("section_value").split("\n"))));
                     break;
-                case "EDUCATION":
-                case "EXPERIENCE":
+                case EDUCATION:
+                case EXPERIENCE:
+                    resume.addSection(type,JsonParser.read(rs.getString("section_value"), Section.class));
             }
         }
     }
 
-    private String sectionToString(String type, Section section) {
+    private String sectionToString(SectionType type, Section section) {
         String str = null;
         switch (type) {
-            case "CURRENT_POSITION":
-            case "PERSONAL":
-            case "OBJECTIVE":
+            case OBJECTIVE:
+            case PERSONAL:
                 str = ((TextSection) section).getText();
                 break;
-            case "ACHIEVEMENT":
-            case "QUALIFICATIONS":
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
                 str = String.join("\n", ((TextListSection) section).getRecords());
                 break;
-
-            case "EDUCATION":
-            case "EXPERIENCE":
-                str = "";
+            case EDUCATION:
+            case EXPERIENCE:
+                str = JsonParser.write(section, Section.class);
         }
         return str;
     }

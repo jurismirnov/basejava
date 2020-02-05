@@ -9,9 +9,13 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
@@ -42,8 +46,8 @@ public abstract class AbstractStorageTest {
 
         R1.addContact(ContactType.EMAIL, "mail1@ya.ru");
         R1.addContact(ContactType.PHONENR, "11111");
-        // R2.addContact(ContactType.EMAIL, "mail2@ya.ru");
-        // R2.addContact(ContactType.PHONENR, "22222");
+        R2.addContact(ContactType.EMAIL, "mail2@ya.ru");
+        R2.addContact(ContactType.PHONENR, "22222");
         R3.addContact(ContactType.EMAIL, "mail3@ya.ru");
         R3.addContact(ContactType.PHONENR, "33333");
         R4.addContact(ContactType.EMAIL, "mail4@ya.ru");
@@ -63,7 +67,24 @@ public abstract class AbstractStorageTest {
         R3.addSection(SectionType.PERSONAL, new TextSection("R3 Bla bla bla Personal"));
         R3.addSection(SectionType.ACHIEVEMENT, new TextListSection(Arrays.asList("R3 Achievement1", "R3 Achievement2", "R3 Achievement3")));
         R3.addSection(SectionType.QUALIFICATIONS, new TextListSection(Arrays.asList("R2 Qual1", "R2 Qual2", "R2 Qual3")));
-
+        R1.addSection(SectionType.EXPERIENCE,
+                new OrganisationListSection(Stream.of(
+                        new Organisation("Organization1", "http://Organization1.ru",
+                                Stream.of(
+                                        new Position(LocalDate.of(2001, 01, 01), LocalDate.of(2002, 01, 01), "position1", "description1"),
+                                        new Position(LocalDate.of(2002, 1, 3), LocalDate.of(2005, 02, 06), "position2", "description2"))
+                                        .collect(Collectors.toList())
+                        ),
+                        new Organisation("Organization2", "http://Organization2.ru",
+                                Stream.of(
+                                        new Position(LocalDate.of(2001, 01, 01), LocalDate.of(2002, 01, 01), "position1", "description1"))
+                                        .collect(Collectors.toList()))).collect(Collectors.toList())));
+        R1.addSection(SectionType.EDUCATION,
+                new OrganisationListSection(Stream.of(
+                        new Organisation("Organization11", "http://Organization11.ru",
+                                Stream.of(
+                                        new Position(LocalDate.of(1981, 01, 01), LocalDate.of(2002, 01, 01), "student", "description1"))
+                                        .collect(Collectors.toList()))).collect(Collectors.toList())));
     }
 
     protected AbstractStorageTest(Storage storage) {
